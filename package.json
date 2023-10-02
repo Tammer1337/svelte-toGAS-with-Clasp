@@ -5,12 +5,18 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "run-s build:ui build:ui:generate && npm run push:gas",
+    "build:ui": "vite build",
+    "build:ui:generate": "run-p build:ui:generate:*",
+    "build:ui:generate:css": "echo '<style>' > ./gas/stylesheet.html && cat ./dist/assets/index*.css >> ./gas/stylesheet.html && echo '</style>' >> ./gas/stylesheet.html",
+    "build:ui:generate:js": "echo '<script type=\"module\">' > ./gas/javascript.html && cat ./dist/assets/index*.js >> ./gas/javascript.html && echo '</script>' >> ./gas/javascript.html",
+    "preview": "vite preview",
+    "push:gas": "cd gas && clasp push && clasp deploy --deploymentId AKfycbxwnVtEwyVxUJHShPBgdk2k4-r2QMSVUxJrywelHflgJBbHVhFvADE1F_Jy-3fly_aN1A && cd .."
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.4.2",
     "autoprefixer": "^10.4.14",
+    "npm-run-all": "^4.1.5",
     "postcss": "^8.4.24",
     "postcss-load-config": "^4.0.1",
     "svelte": "^4.0.5",
